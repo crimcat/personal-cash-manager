@@ -36,16 +36,7 @@ public class TransactionFactory {
         }
         if(!acc.isValid()) {
             hint = ((hint == null) || (hint.length() == 0)) ? "" : "(" + hint + ")";
-            throw new IncorrectTransactionException("Account is not valid for " + descr + hint);
-        }
-    }
-    
-    public static class IncorrectTransactionException extends Exception {
-        IncorrectTransactionException() {
-            super();
-        }
-        IncorrectTransactionException(String descr) {
-            super(descr);
+            throw new IncorrectTransactionException("Account " + acc.name() + " is not valid for " + descr + hint);
         }
     }
 }

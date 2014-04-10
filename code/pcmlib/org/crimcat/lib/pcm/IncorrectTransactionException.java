@@ -6,20 +6,15 @@
 
 package org.crimcat.lib.pcm;
 
-import java.util.List;
-
 /**
  *
- * @author mgx647
+ * @author crimcat
  */
-public interface IAccount {
-
-    String name();
-    String description();
-    
-    int balance();
-    
-    boolean isValid();
-    
-    List<ITransaction> paymentsHistory();
+public class IncorrectTransactionException extends Exception {
+    IncorrectTransactionException() {
+        super();
+    }
+    IncorrectTransactionException(String descr) {
+        super(descr);
+    }
 }
