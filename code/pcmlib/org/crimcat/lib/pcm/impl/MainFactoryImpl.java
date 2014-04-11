@@ -6,22 +6,21 @@
 
 package org.crimcat.lib.pcm.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.crimcat.lib.pcm.IAccount;
-import org.crimcat.lib.pcm.ITransaction;
 
 /**
  *
  * @author mgx647
  */
 public class MainFactoryImpl {
-    public static ITransaction createTransaction(IAccount src,
-                                                 IAccount dst,
-                                                 int amount,
-                                                 String description) {
+   
+    public static IAccount createAccount(String name, int initialBalance) {
         return null;
     }
     
-    public static IAccount createAccount(String name, int initialBalance) {
-        return null;
+    public static List<IAccount> allAccounts() {
+        return new ArrayList<>();
     }
 }

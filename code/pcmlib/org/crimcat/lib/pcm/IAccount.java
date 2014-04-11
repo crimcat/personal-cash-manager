@@ -22,4 +22,7 @@ public interface IAccount {
     boolean isValid();
     
     List<ITransaction> paymentsHistory();
+    
+    IOperationSession openOperationSession();
+    void closeOperationSession(IOperationSession session);
 }

@@ -11,9 +11,6 @@ package org.crimcat.lib.pcm;
  * @author crimcat
  */
 public class IncorrectTransactionException extends Exception {
-    IncorrectTransactionException() {
-        super();
-    }
     IncorrectTransactionException(String descr) {
         super(descr);
     }
