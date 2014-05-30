@@ -14,38 +14,46 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.crimcat.lib.pcm.IApplicationConfig;
 
 /**
  *
  * @author mgx647
  */
-public class AppConfig {
+public class AppConfig implements IApplicationConfig {
     
     private static AppConfig appConfig = null;
-    public static AppConfig getAppConfig() {
+    public static IApplicationConfig loadConfig() {
         if(appConfig == null) {
             appConfig = new AppConfig();
         }
         return appConfig;
     }
     
-    public String getAppDatabaseDir() {
-        return getAppDataDirFQN();
+    // -------------------------------------------------------------------------
+    
+    @Override
+    public boolean isAvailable() {
+        return isLoaded;
     }
+
+    // -------------------------------------------------------------------------
     
     private AppConfig() {
-        path = new File(getAppDataDirFQN());
+        appDatabaseDir = getAppDefaultDataDirFQN();
+        path = new File(appDatabaseDir);
         path.mkdir();
         configProps = new Properties();
+        boolean success = false;
         try {
-        File configPropsFile = new File(getAppConfigFilePath());
+            File configPropsFile = new File(appDatabaseDir + SYSTEM_FILE_SEPARATOR + APP_CONFIG_FILE);
             if(configPropsFile.exists() && configPropsFile.canRead()) {
                 try(FileInputStream fis = new FileInputStream(configPropsFile)) {
                     configProps.load(fis);
                 }
-            } else {
-                // Fill in default properties
-                
+            }
+
+            if(!checkAllExpectedOptions()) {
                 try(FileOutputStream fos = new FileOutputStream(configPropsFile)) {
                     configProps.store(fos, "");
                     fos.flush();
@@ -56,20 +64,26 @@ public class AppConfig {
         } catch (IOException ex) {
             Logger.getLogger(AppConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
+        finally {
+            isLoaded = success;
+        }
     }
     
-    private static String getAppDataDirFQN() {
+    private boolean checkAllExpectedOptions() {
+        return true;
+    }
+    
+    private static String getAppDefaultDataDirFQN() {
         if(null == SYSTEM_USER_HOME) {
             throw new RuntimeException("Cannot find user home. Bailing out...");
         }
         return SYSTEM_USER_HOME + SYSTEM_FILE_SEPARATOR + APP_DATA_DIR;
     }
-    private static String getAppConfigFilePath() {
-        return getAppDataDirFQN() + SYSTEM_FILE_SEPARATOR + APP_CONFIG_FILE;
-    }
     
     private File path = null;
     private Properties configProps = null;
+    private String appDatabaseDir = null;
+    private final boolean isLoaded;
     
     private static final String APP_DATA_DIR = ".pcm";
     private static final String APP_CONFIG_FILE = ".global_config";
